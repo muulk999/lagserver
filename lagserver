@@ -1,0 +1,386 @@
+-- Carrega a Rayfield UI Library
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+
+local Window = Rayfield:CreateWindow({
+   Name = "Delta - Painel Completo de Testes & Rastreador de Mansão",
+   LoadingTitle = "Carregando Módulos e Painel...",
+   LoadingSubtitle = "Painel Definitivo com Spam de Mansão (Tira e Bota)",
+   ConfigurationSaving = { Enabled = false }
+})
+
+-- ABA 1: EVENTOS DE TELA E ANÚNCIOS (Screen Stop / UI)
+local Tab1 = Window:CreateTab("Tela e Anúncios", 4483362458)
+local Sec1 = Tab1:CreateSection("Controle de Tela e Alertas")
+
+Rayfield:Notify({
+   Title = "Painel Carregado",
+   Content = "Menu Rayfield integrado com o Spam de Mansão com sucesso.",
+   Duration = 5,
+})
+
+local memoryStressActive = false
+
+Tab1:CreateButton({
+   Name = "🔴 Executar Evento: Screen Stop (Memory Stress)",
+   Callback = function()
+       if memoryStressActive then
+           Rayfield:Notify({ Title = "Aviso", Content = "O evento já está rodando!", Duration = 4 })
+           return
+       end
+
+       memoryStressActive = true
+
+       local ScreenGui = Instance.new("ScreenGui")
+       ScreenGui.Name = "ScreenStopAlert"
+       ScreenGui.IgnoreGuiInset = true
+       ScreenGui.Parent = game:GetService("CoreGui")
+
+       local Frame = Instance.new("Frame")
+       Frame.Size = UDim2.new(1, 0, 1, 0)
+       Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+       Frame.BackgroundTransparency = 0.3
+       Frame.Parent = ScreenGui
+
+       local TextLabel = Instance.new("TextLabel")
+       TextLabel.Size = UDim2.new(1, 0, 0, 100)
+       TextLabel.Position = UDim2.new(0, 0, 0.45, 0)
+       TextLabel.BackgroundTransparency = 1
+       TextLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
+       TextLabel.TextScaled = true
+       TextLabel.Font = Enum.Font.SourceSansBold
+       TextLabel.Text = "⚠️ SCREEN STOP ATIVADO: SOBRECARREGANDO RAM ⚠️"
+       TextLabel.Parent = Frame
+
+       Rayfield:Notify({ Title = "Evento Iniciado", Content = "Injetando dados para elevar o consumo de RAM...", Duration = 5 })
+
+       task.spawn(function()
+           local storageContainer = {}
+           for i = 1, 50 do
+               if not memoryStressActive then break end
+               local heavyFolder = Instance.new("Folder")
+               heavyFolder.Name = "StressData_" .. tostring(i)
+               
+               for j = 1, 500 do
+                   local part = Instance.new("Part")
+                   part.Size = Vector3.new(10, 10, 10)
+                   part.Parent = heavyFolder
+               end
+               
+               table.insert(storageContainer, heavyFolder)
+               task.wait(0.1)
+           end
+           
+           task.wait(3)
+           ScreenGui:Destroy()
+           memoryStressActive = false
+           Rayfield:Notify({ Title = "Evento Finalizado", Content = "Ciclo concluído.", Duration = 5 })
+       end)
+   end,
+})
+
+Tab1:CreateButton({
+   Name = "📢 Disparar Loop de Anúncios (UI Spam Local)",
+   Callback = function()
+       Rayfield:Notify({ Title = "Teste Iniciado", Content = "Criando instâncias massivas de anúncios na tela...", Duration = 3 })
+       
+       task.spawn(function()
+           for i = 1, 300 do
+               local adGui = Instance.new("ScreenGui")
+               adGui.Name = "StressAd_" .. i
+               adGui.Parent = game:GetService("CoreGui")
+               
+               local adFrame = Instance.new("Frame")
+               adFrame.Size = UDim2.new(0, 300, 0, 250)
+               adFrame.Position = UDim2.new(math.random(0, 80)/100, 0, math.random(0, 80)/100, 0)
+               adFrame.BackgroundColor3 = Color3.fromRGB(math.random(0,255), math.random(0,255), math.random(0,255))
+               adFrame.Parent = adGui
+               
+               local adText = Instance.new("TextLabel")
+               adText.Size = UDim2.new(1, 0, 1, 0)
+               adText.Text = "ANÚNCIO DE TESTE DE RESISTÊNCIA #" .. i
+               adText.TextColor3 = Color3.new(1,1,1)
+               adText.TextScaled = true
+               adText.Parent = adFrame
+               
+               task.wait(0.02)
+           end
+       end)
+   end,
+})
+
+
+-- ABA 2: SERVIDOR E CARGA GERAL (RAM, Workspace, Rede)
+local Tab2 = Window:CreateTab("Servidor & Carga", 4483362458)
+local Sec2 = Tab2:CreateSection("Estresse de Hardware e Rede")
+
+Tab2:CreateButton({
+   Name = "🧠 Estressar Alocação de RAM (Memory Leak Sim)",
+   Callback = function()
+       Rayfield:Notify({ Title = "Alocação Ativa", Content = "Gerando peso de dados na memória RAM...", Duration = 3 })
+       
+       task.spawn(function()
+           local memoryHolder = {}
+           for i = 1, 100 do
+               local massiveTable = {}
+               for j = 1, 50000 do
+                   table.insert(massiveTable, {
+                       Data = string.rep("X", 1000),
+                       Index = j,
+                       Timestamp = tick()
+                   })
+               end
+               table.insert(memoryHolder, massiveTable)
+               task.wait(0.1)
+           end
+       end)
+   end,
+})
+
+Tab2:CreateButton({
+   Name = "🌐 Inundar Workspace com Objetos (Carga Global)",
+   Callback = function()
+       Rayfield:Notify({ Title = "Carga Global Iniciada", Content = "Gerando blocos físicos no mapa...", Duration = 3 })
+       
+       task.spawn(function()
+           local workspace = game:GetService("Workspace")
+           local stressFolder = Instance.new("Folder")
+           stressFolder.Name = "ServerMemoryStressContainer"
+           stressFolder.Parent = workspace
+           
+           for i = 1, 200 do
+               local part = Instance.new("Part")
+               part.Name = "StressPart_" .. i
+               part.Size = Vector3.new(5, 5, 5)
+               part.Position = Vector3.new(math.random(-100, 100), 50, math.random(-100, 100))
+               part.Anchored = false
+               part.Parent = stressFolder
+               task.wait(0.02)
+           end
+       end)
+   end,
+})
+
+
+-- ABA 3: SPAM DE MANSÃO ("TIRA E BOTA") BASEADO NOS LOGS
+local Tab3 = Window:CreateTab("Spam de Mansão", 4483362458)
+local Sec3 = Tab3:CreateSection("Controle de Spam (Tira e Bota da Mansão ID: 5539258039)")
+
+local mansionSpamActive = false
+local mansionID = "5539258039"
+
+local function copyToClipboard(text)
+    if setclipboard then
+        setclipboard(text)
+        Rayfield:Notify({ Title = "Copiado!", Content = "Código copiado para a área de transferência.", Duration = 2 })
+    end
+end
+
+Tab3:CreateButton({
+   Name = "🌸 Iniciar Spam de Mansão (Tira e Bota Rápido)",
+   Callback = function()
+       if mansionSpamActive then
+           Rayfield:Notify({ Title = "Aviso", Content = "O spam de mansão já está ativo!", Duration = 3 })
+           return
+       end
+
+       mansionSpamActive = true
+       Rayfield:Notify({ Title = "Spam Iniciado", Content = "Alternando entre remover e criar a mansão ID: " .. mansionID, Duration = 4 })
+
+       task.spawn(function()
+           local Workspace = game:GetService("Workspace")
+           local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+           while mansionSpamActive do
+               -- 1. TIRA (Remove a mansão do Workspace se existir)
+               pcall(function()
+                   for _, obj in ipairs(Workspace:GetChildren()) do
+                       if obj.Name == "UserHouse." .. mansionID or obj.Name:find(mansionID) then
+                           obj:Destroy()
+                       end
+                   end
+               end)
+               
+               task.wait(0.2)
+               if not mansionSpamActive then break end
+
+               -- 2. BOTA (Dispara os remotes de construção e recria a pasta)
+               pcall(function()
+                   for _, remote in ipairs(ReplicatedStorage:GetDescendants()) do
+                       if remote:IsA("RemoteEvent") then
+                           local nameL = remote.Name:lower()
+                           if nameL:find("house") or nameL:find("mansion") or nameL:find("plot") or nameL:find("buy") then
+                               remote:FireServer(mansionID, true)
+                               break
+                           end
+                       end
+                   end
+                   
+                   local fakeHouse = Instance.new("Folder")
+                   fakeHouse.Name = "UserHouse." .. mansionID
+                   fakeHouse.Parent = Workspace
+                   task.wait(0.3)
+                   fakeHouse:Destroy()
+               end)
+
+               task.wait(0.4)
+           end
+       end)
+   end,
+})
+
+Tab3:CreateButton({
+   Name = "🛑 Parar Spam de Mansão",
+   Callback = function()
+       mansionSpamActive = false
+       Rayfield:Notify({ Title = "Spam Parado", Content = "O ciclo de tira e bota da mansão foi interrompido.", Duration = 3 })
+   end,
+})
+
+Tab3:CreateButton({
+   Name = "📋 Copiar Snippet do Spam de Mansão",
+   Callback = function()
+       local snippet = string.format([[
+local mansionID = "%s"
+local Workspace = game:GetService("Workspace")
+for _, obj in ipairs(Workspace:GetChildren()) do
+    if obj.Name:find(mansionID) then obj:Destroy() end
+end
+]], mansionID)
+       copyToClipboard(snippet)
+   end,
+})
+
+
+-- ABA 4: IMMERSIVE ADS & FORÇAR CLIQUE NO TELÃO
+local Tab4 = Window:CreateTab("Immersive Ads", 4483362458)
+local Sec4 = Tab4:CreateSection("Forçar Clique no Telão por Jogador")
+
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+local function getPlayerList()
+    local list = {}
+    for _, p in ipairs(Players:GetPlayers()) do
+        table.insert(list, p.Name)
+    end
+    if #list == 0 then
+        table.insert(list, "Nenhum player encontrado")
+    end
+    return list
+end
+
+local selectedTargetPlayer = localPlayer.Name
+
+local PlayerDropdown = Tab4:CreateDropdown({
+   Name = "Selecionar Player Alvo",
+   Options = getPlayerList(),
+   CurrentOption = {localPlayer.Name},
+   MultipleOptions = false,
+   Flag = "SelectedAdPlayer",
+   Callback = function(Option)
+       if type(Option) == "table" then
+           selectedTargetPlayer = Option[1]
+       else
+           selectedTargetPlayer = Option
+       end
+   end,
+})
+
+Tab4:CreateButton({
+   Name = "🔄 Atualizar Lista de Players",
+   Callback = function()
+       PlayerDropdown:Refresh(getPlayerList(), true)
+       Rayfield:Notify({ Title = "Lista Atualizada", Content = "Jogadores no mapa recarregados.", Duration = 2 })
+   end,
+})
+
+Tab4:CreateButton({
+   Name = "🎯 Forçar Player a Clicar no Telão de Anúncio",
+   Callback = function()
+       local targetPlr = Players:FindFirstChild(selectedTargetPlayer)
+       
+       if not targetPlr then
+           Rayfield:Notify({ Title = "Erro", Content = "Player selecionado não foi encontrado no servidor!", Duration = 3 })
+           return
+       end
+
+       Rayfield:Notify({ Title = "Immersive Ads", Content = "Forçando " .. targetPlr.Name .. " a interagir com o telão...", Duration = 3 })
+       
+       task.spawn(function()
+           local workspace = game:GetService("Workspace")
+           local replicatedStorage = game:GetService("ReplicatedStorage")
+           
+           if targetPlr.Character and targetPlr.Character:FindFirstChild("HumanoidRootPart") then
+               local hrp = targetPlr.Character.HumanoidRootPart
+               for _, v in ipairs(workspace:GetDescendants()) do
+                   local nameL = v.Name:lower()
+                   if nameL:find("boardad") or nameL:find("rewardedvideobillboard") or nameL:find("screenframe") or nameL:find("billboard") then
+                       pcall(function()
+                           if v:IsA("BasePart") then
+                               firetouchinterest(hrp, v, 0)
+                               firetouchinterest(hrp, v, 1)
+                           elseif v:IsA("Model") then
+                               local primary = v.PrimaryPart or v:FindFirstChildWhichIsA("BasePart")
+                               if primary then
+                                   firetouchinterest(hrp, primary, 0)
+                                   firetouchinterest(hrp, primary, 1)
+                               end
+                           end
+                       end)
+                   end
+               end
+           end
+
+           for _, v in ipairs(workspace:GetDescendants()) do
+               if v:IsA("ClickDetector") then
+                   local pName = v.Parent.Name:lower()
+                   if pName:find("ad") or pName:find("board") or pName:find("reward") then
+                       pcall(function()
+                           fireclickdetector(v)
+                       end)
+                   end
+               end
+           end
+
+           for _, v in ipairs(replicatedStorage:GetDescendants()) do
+               if v:IsA("RemoteEvent") or v:IsA("RemoteFunction") then
+                   local nameL = v.Name:lower()
+                   if nameL:find("ad") or nameL:find("reward") or nameL:find("placement") or nameL:find("billboard") then
+                       pcall(function()
+                           if v:IsA("RemoteEvent") then
+                               v:FireServer(3604972862, "ShowAd", true, targetPlr)
+                               v:FireServer("ClickBillboard", targetPlr)
+                           end
+                       end)
+                   end
+               end
+           end
+
+           Rayfield:Notify({ Title = "Sucesso", Content = "Comando de clique no telão executado para " .. targetPlr.Name, Duration = 3 })
+       end)
+   end,
+})
+
+
+-- ABA 5: LIMPEZAS E RESET GERAL
+local Tab5 = Window:CreateTab("Limpeza", 4483362458)
+local Sec5 = Tab5:CreateSection("Remover Elementos Criados")
+
+Tab5:CreateButton({
+   Name = "🛑 Parar / Limpar Efeitos e Spam",
+   Callback = function()
+       memoryStressActive = false
+       mansionSpamActive = false
+       local coreGui = game:GetService("CoreGui")
+       if coreGui:FindFirstChild("ScreenStopAlert") then
+           coreGui.ScreenStopAlert:Destroy()
+       end
+       
+       local workspace = game:GetService("Workspace")
+       if workspace:FindFirstChild("ServerMemoryStressContainer") then
+           workspace.ServerMemoryStressContainer:Destroy()
+       end
+       
+       Rayfield:Notify({ Title = "Limpeza Completa", Content = "Todos os testes e spams foram encerrados.", Duration = 3 })
+   end,
+})
